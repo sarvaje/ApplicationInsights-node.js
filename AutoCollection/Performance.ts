@@ -42,6 +42,13 @@ class AutoCollectPerformance {
         this._client = client;
     }
 
+    private _clearInterval () {
+        if(this._handle) {
+            clearInterval(this._handle);
+            this._handle = undefined;
+        }
+    }
+
     public enable(isEnabled: boolean) {
         this._isEnabled = isEnabled;
         if(this._isEnabled && !this._isInitialized) {
@@ -60,10 +67,7 @@ class AutoCollectPerformance {
                 this._handle = setInterval(() => this.trackPerformance(), 10000);
             }
         } else {
-            if(this._handle) {
-                clearInterval(this._handle);
-                this._handle = undefined;
-            }
+            this._clearInterval();
         }
     }
 
@@ -270,6 +274,7 @@ class AutoCollectPerformance {
 
     public dispose() {
         AutoCollectPerformance.INSTANCE = null;
+        this._clearInterval();
         this._isInitialized = false;
     }
 }
